@@ -35,6 +35,10 @@ class PersonTests: XCTestCase {
     XCTAssert(mike.spouse != nil)
   }
   
+  func testCustomStringConvertible() {
+    let matt = Person(firstName: "Matt", lastName: "Ngo", age: 20)
+    XCTAssert(matt.description() == "MattNgo20")
+  }
 }
 
 class FamilyTests : XCTestCase {
@@ -68,6 +72,14 @@ class FamilyTests : XCTestCase {
     
     let familyIncome = family.householdIncome()
     XCTAssert(familyIncome == 12000)
+  }
+    
+  func testCustomStringConvertible() {
+    let bob = Person(firstName: "Bob", lastName: "Bob", age: 20)
+    let joe = Person(firstName: "Joe", lastName: "Joe", age: 20)
+    let family = Family(spouse1: bob, spouse2: joe)
+    print("infl: \(family.description())")
+    XCTAssert(family.description() == "[\"BobBob20\", \"JoeJoe20\"]")
   }
   
 }

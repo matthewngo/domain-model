@@ -21,12 +21,47 @@ open class TestMe {
 }
 
 ////////////////////////////////////
+// CustomStringConvertible
+//
+protocol CustomStringConvertible {
+    func description() -> String
+}
+
+////////////////////////////////////
+// Mathematics
+//
+protocol Mathematics {
+    mutating func addMoney(_ : Int)
+    mutating func subtractMoney(_ : Int)
+}
+
+extension Double {
+    var USD: Money {
+        return Money(amount: Int(self), currency: "USD")
+    }
+    var EUR: Money {
+        return Money(amount: Int(self), currency: "EUR")
+    }
+    var GBP: Money {
+        return Money(amount: Int(self), currency: "GBP")
+    }
+    var YEN: Money {
+        return Money(amount: Int(self), currency: "YEN")
+    }
+    
+}
+
+////////////////////////////////////
 // Money
 //
-public struct Money {
+public struct Money: CustomStringConvertible, Mathematics {
   public var amount : Int
   public var currency : String
   
+  public func description() -> String {
+    return currency + String(amount)
+  }
+    
   public func convert(_ to: String) -> Money {
     if (currency == to) {
         return self
@@ -71,15 +106,21 @@ public struct Money {
         return Money(amount: amount-from.amount, currency: currency)
     }
   }
+  mutating func addMoney(_ to: Int) {
+    self.amount += to
+  }
+  mutating func subtractMoney(_ from: Int) {
+    self.amount -= from
+  }
 }
 
 ////////////////////////////////////
 // Job
 //
-open class Job {
+open class Job: CustomStringConvertible {
   fileprivate var title : String
   fileprivate var type : JobType
-
+    
   public enum JobType {
     case Hourly(Double)
     case Salary(Int)
@@ -111,12 +152,17 @@ open class Job {
   open func raise(_ amt : Double) {
     type.add(amt)
   }
+    
+  open func description() -> String {
+    return title + String(describing: type)
+  }
+    
 }
 
 ////////////////////////////////////
 // Person
 //
-open class Person {
+open class Person: CustomStringConvertible {
   open var firstName : String = ""
   open var lastName : String = ""
   open var age : Int = 0
@@ -148,14 +194,18 @@ open class Person {
   }
   
   open func toString() -> String {
-    return "[Person: firstName:\(firstName) lastName:\(lastName) age:\(age) job:\(_job) spouse:\(_spouse)]"
+    return "[Person: firstName:\(firstName) lastName:\(lastName) age:\(age) job:\(String(describing: _job)) spouse:\(String(describing: _spouse))]"
+  }
+    
+  open func description() -> String {
+    return firstName + lastName + String(age)
   }
 }
 
 ////////////////////////////////////
 // Family
 //
-open class Family {
+open class Family: CustomStringConvertible {
   fileprivate var members : [Person] = []
   
   public init(spouse1: Person, spouse2: Person) {
@@ -180,6 +230,14 @@ open class Family {
         }
     }
     return total
+  }
+    
+  open func description() -> String {
+    var list: [String] = []
+    for member in members {
+        list.append(member.description())
+    }
+    return String(describing: list)
   }
 }
 

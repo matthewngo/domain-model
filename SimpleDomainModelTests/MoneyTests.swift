@@ -92,5 +92,20 @@ class MoneyTests: XCTestCase {
     XCTAssert(total.amount == 10)
     XCTAssert(total.currency == "GBP")
   }
+    
+  func testMoneyExtensionAndCustomStringConvertible() {
+    XCTAssert(20.0.USD.description() == "USD20")
+    XCTAssert(20.0.YEN.description() == "YEN20")
+    XCTAssert(20.0.GBP.description() == "GBP20")
+    XCTAssert(20.0.EUR.description() == "EUR20")
+  }
+    
+  func testMathematicsProtocol() {
+    var twentyUSD = Money(amount: 20, currency: "USD")
+    twentyUSD.addMoney(5)
+    XCTAssert(twentyUSD.amount == 25)
+    twentyUSD.subtractMoney(5)
+    XCTAssert(twentyUSD.amount == 20)
+  }
 }
 
